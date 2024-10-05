@@ -1,0 +1,30 @@
+#!/usr/bin/bash
+#
+# Name: lssh
+# Purpose:  Script to ssh via cygwin/mintty and keep a log of each session.
+# Note:  Based on original gssh script by Tim Nelson
+#
+# Written by: Tim Nelson
+# Date: 06/16/2017
+# Modified: 3/13/2022 - Changed for home lab
+
+TS=$(date +%y%m%d%H%M%S)
+log=/var/log/sshlogs/$1.$TS.out
+user=timn
+dname=$1
+
+# Set Title
+echo -ne "\033]0;$1 \007"
+
+# Login
+if [ "$2" = "" ];
+then
+    ssh -l $user $dname | tee $log
+else
+    if [ "$3" = "" ];
+    then
+        ssh -l $2 $dname | tee $log
+    else
+        ssh -l $2 $3 $dname | tee $log
+    fi
+fi
